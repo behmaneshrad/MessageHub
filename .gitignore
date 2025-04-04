@@ -2,7 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/MessageHub/MessageHub.sln
 /.vs
-/MessageHub/.vs/MessageHub/FileContentIndex
-/MessageHub/.vs/MessageHub/v17
+/MessageHub/.vs/MessageHub
