@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  emailreceiver.api:
+    image: ${DOCKER_REGISTRY-}emailreceiver
+    build:
+      context: .
+      dockerfile: src/Services/EmailReceiver/EmailReceiver.API/Dockerfile
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - kafka
+      - zookeeper
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+      - MessageBroker__Type=${MESSAGE_BROKER_TYPE:-RabbitMQ}
+      - MessageBroker__Library=${MESSAGE_BROKER_LIBRARY:-MassTransit}
+
+  emailsender.api:
+    image: ${DOCKER_REGISTRY-}emailsender
+    build:
+      context: .
+      dockerfile: src/Services/EmailSender/EmailSender.API/Dockerfile
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - kafka
+      - zookeeper
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+      - MessageBroker__Type=${MESSAGE_BROKER_TYPE:-RabbitMQ}
+      - MessageBroker__Library=${MESSAGE_BROKER_LIBRARY:-MassTransit}
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+volumes:
+  mongodb_data:
