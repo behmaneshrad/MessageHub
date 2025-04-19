@@ -20,9 +20,11 @@ namespace MessageBroker.Kafka.MassTransit
 			services.AddMassTransit(x =>
 			{
 				x.AddConsumers(AppDomain.CurrentDomain.GetAssemblies());
+				x.SetKebabCaseEndpointNameFormatter();
 
-				x.UsingInMemory((context, cfg) =>
+                x.UsingInMemory((context, cfg) =>
 				{
+					cfg.UseConcurrencyLimit(10);
 					cfg.ConfigureEndpoints(context);
 				});
 

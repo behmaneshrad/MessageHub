@@ -7,15 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.CAP" Version="8.3.3" />
-    <PackageReference Include="DotNetCore.CAP.Dashboard" Version="8.3.3" />
-    <PackageReference Include="DotNetCore.CAP.MongoDB" Version="8.3.3" />
-    <PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="8.3.3" />
+	<PackageReference Include="DotNetCore.CAP" Version="8.3.3" />
+	<PackageReference Include="DotNetCore.CAP.Dashboard" Version="8.3.3" />
+	<PackageReference Include="DotNetCore.CAP.MongoDB" Version="8.3.3" />
+	<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="8.3.3" />
+	<PackageReference Include="DotNetCore.CAP.SqlServer" Version="8.3.3" />
     <PackageReference Include="MassTransit" Version="8.4.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
-    <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
+	<PackageReference Include="MongoDB.Driver" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

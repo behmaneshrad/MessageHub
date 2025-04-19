@@ -8,6 +8,8 @@ using MessageBroker.Kafka.MassTransit;
 using MessageBroker.Kafka.CAP;
 using MessageBroker.RabbitMQ.MassTransit;
 using MessageBroker.RabbitMQ.CAP;
+using MassTransit.JobService;
+using EmailSender.API.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.AddSwaggerGen(c =>
 {
 	c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmailSender.API", Version = "v1" });
 });
+
+builder.Services.AddScoped<EmailMessageCreatedConsumer>();
 
 // Register MongoDB Repository
 builder.Services.AddSingleton<IEmailRepository, MongoEmailRepository>();
@@ -33,11 +37,10 @@ if (messageBrokerType == "RabbitMQ")
 {
 	if (messageBrokerLibrary == "MassTransit")
 	{
-		builder.Services.AddMassTransitWithRabbitMq(builder.Configuration);
-	}
-	else if (messageBrokerLibrary == "CAP")
-	{
-		builder.Services.AddCAPWithRabbitMq(builder.Configuration);
+		builder.Services.AddMassTransitWithRabbitMq(builder.Configuration, cfg =>
+		{
+			cfg.AddConsumer<EmailMessageCreatedConsumer>();
+		});
 	}
 }
 else if (messageBrokerType == "Kafka")

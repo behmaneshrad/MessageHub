@@ -2,6 +2,7 @@
 using EmailReceiver.Application.IntegrationEvents;
 using EmailReceiver.Domain.Entities;
 using EmailReceiver.Domain.Interfaces;
+using MessageBroker.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmailReceiver.API.Controllers
@@ -11,12 +12,12 @@ namespace EmailReceiver.API.Controllers
 	public class EmailController : ControllerBase
 	{
 		private readonly IEmailRepository _emailRepository;
-		private readonly IMessageBroker _messageBroker;
+		private readonly MessageBroker.Common.Interfaces.IMessageBroker _messageBroker;
 		private readonly ILogger<EmailController> _logger;
 
 		public EmailController(
 			IEmailRepository emailRepository,
-			IMessageBroker messageBroker,
+			MessageBroker.Common.Interfaces.IMessageBroker messageBroker,
 			ILogger<EmailController> logger)
 		{
 			_emailRepository = emailRepository;
