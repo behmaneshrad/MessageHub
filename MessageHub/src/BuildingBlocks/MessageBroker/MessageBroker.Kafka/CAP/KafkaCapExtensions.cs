@@ -13,11 +13,13 @@ namespace MessageBroker.Kafka.CAP
 			// Register CAP with Kafka
 			services.AddCap(x =>
 			{
-				// Use MongoDB for storage
-				x.UseMongoDB(configuration.GetConnectionString("MongoDb"));
+                // Use MongoDB for storage
+                //x.UseMongoDB(configuration.GetConnectionString("MongoDb"));
 
-				// Use Kafka as transport
-				var kafkaConfig = configuration.GetSection("MessageBroker:Kafka");
+                x.UseSqlServer(configuration.GetConnectionString("SqlDb"));
+
+                // Use Kafka as transport
+                var kafkaConfig = configuration.GetSection("MessageBroker:Kafka");
 				x.UseKafka(opt =>
 				{
 					opt.Servers = kafkaConfig["BootstrapServers"];					

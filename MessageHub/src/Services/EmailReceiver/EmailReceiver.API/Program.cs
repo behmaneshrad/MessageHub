@@ -7,6 +7,9 @@ using MessageBroker.Kafka.MassTransit;
 using MessageBroker.Kafka.CAP;
 using MessageBroker.RabbitMQ.MassTransit;
 using MessageBroker.RabbitMQ.CAP;
+using RabbitMQ.Client;
+using MassTransit;
+using MassTransit.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,25 +30,29 @@ var messageBrokerLibrary = builder.Configuration["MessageBroker:Library"]; // "M
 
 if (messageBrokerType == "RabbitMQ")
 {
-	if (messageBrokerLibrary == "MassTransit")
-	{
-		builder.Services.AddMassTransitWithRabbitMq(builder.Configuration);
-	}
-	else if (messageBrokerLibrary == "CAP")
-	{
-		builder.Services.AddCAPWithRabbitMq(builder.Configuration);
-	}
+    if (messageBrokerLibrary == "MassTransit")
+    {
+        builder.Services.AddMassTransitWithRabbitMq(builder.Configuration, cfg =>
+        {
+            cfg.AddDelayedMessageScheduler();           
+        });
+        
+    }
+    else if (messageBrokerLibrary == "CAP")
+    {
+        builder.Services.AddCAPWithRabbitMq(builder.Configuration);
+    }
 }
 else if (messageBrokerType == "Kafka")
 {
-	if (messageBrokerLibrary == "MassTransit")
-	{
-		builder.Services.AddMassTransitWithKafka(builder.Configuration);
-	}
-	else if (messageBrokerLibrary == "CAP")
-	{
-		builder.Services.AddCAPWithKafka(builder.Configuration);
-	}
+    if (messageBrokerLibrary == "MassTransit")
+    {
+        builder.Services.AddMassTransitWithKafka(builder.Configuration);
+    }
+    else if (messageBrokerLibrary == "CAP")
+    {
+        builder.Services.AddCAPWithKafka(builder.Configuration);
+    }
 }
 
 var app = builder.Build();

@@ -16,7 +16,7 @@ namespace EmailReceiver.Infrastructure.Repositories
 		public MongoEmailRepository(IConfiguration configuration)
 		{
 			var client = new MongoClient(configuration.GetConnectionString("MongoDb"));
-			var database = client.GetDatabase("EmailReceiverDb");
+			var database = client.GetDatabase("MessageHub");
 			_emailCollection = database.GetCollection<EmailMessage>("Emails");
 		}
 
